@@ -5,8 +5,7 @@ import './styles/tailwind.css';
 function App() {
 
   return (
-    <div className="App">
-      
+    <div className="bg-white h-screen w-screen">
     </div>
   )
 }
