@@ -37,6 +37,7 @@ function Setup() {
       console.log(response); // Should log 'Download Complete' if successful
     } catch (error) {
       console.error('Error downloading Android Platform Tools:', error);
+      setAndroidMsg(`Download Failed: ${error.message}`);
     }
   };
   

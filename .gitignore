@@ -26,3 +26,4 @@ dist-ssr
 node_modules/
 platform-tools-latest-windows.zip
 platform-tools/
+downloads/
