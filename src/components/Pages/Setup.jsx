@@ -9,7 +9,7 @@ function Setup() {
   const [androidProgress, setAndroidProgress] = useState(0);
   const [appiumProgress, setAppiumProgress] = useState(0);
 
-  const handleDownload = () => {
+  const handleBack = () => {
     navigate('/');
   };
 
@@ -43,7 +43,7 @@ function Setup() {
     <div className="flex justify-start items-center bg-[#ff9950] h-[60px] w-screen">
       <div
         className="flex justify-center items-center h-full w-[100px] cursor-pointer transition-all duration-300 ease-in-out transform hover:bg-[#e78f3d] active:bg-[#d07a2a] focus:outline-none focus:ring-2 focus:ring-[#ff9950] focus:ring-offset-2"
-        onClick={handleDownload}
+        onClick={handleBack}
       >
         <FiArrowLeft className="h-8 w-auto text-white" />
       </div>
