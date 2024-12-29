@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 
 node_modules/
+platform-tools-latest-windows.zip
