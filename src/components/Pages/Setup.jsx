@@ -1,30 +1,35 @@
 // src/pages/AboutPage.js
 import React, { useState } from 'react';
 import { FiArrowLeft } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';  
 
 function Setup() {
+ 
   const navigate = useNavigate();
 
   const [androidProgress, setAndroidProgress] = useState(0);
   const [appiumProgress, setAppiumProgress] = useState(0);
+  const [androidMsg, setAndroidMsg] = useState('');
+  const [appiumMsg, setAppiumMsg] = useState('');
 
+  const downloadAndroidPlatformTools = async () => {
+    try {
+      const response = await window.ipcRender.invoke('download-platform-tools', { tool: 'android' });
+      console.log(response); // Should log 'Download Complete' if successful
+    } catch (error) {
+      console.error('Error downloading Android Platform Tools:', error);
+    }
+  };
+  
+
+  
   const handleBack = () => {
     navigate('/');
   };
 
   const startDownload = (tool) => {
     if (tool === 'android') {
-      // Simulate Android Platform Tools download progress
-      const interval = setInterval(() => {
-        setAndroidProgress((prevProgress) => {
-          if (prevProgress >= 100) {
-            clearInterval(interval);
-            return 100;
-          }
-          return prevProgress + 10;
-        });
-      }, 500);
+      downloadAndroidPlatformTools();
     } else if (tool === 'appium') {
       // Simulate Appium Server download progress
       const interval = setInterval(() => {
@@ -71,6 +76,10 @@ function Setup() {
             ></div>
           </div>
 
+          <p className="text-center text-gray-600 mb-4">
+            {androidMsg || ''}
+          </p>
+
           {/* Download Button */}
           <button
             onClick={() => startDownload('android')}
@@ -95,6 +104,11 @@ function Setup() {
               style={{ width: `${appiumProgress}%` }}
             ></div>
           </div>
+
+
+          <p className="text-center text-gray-600 mb-4">
+            {androidMsg || ''}
+          </p>
 
           {/* Download Button */}
           <button
