@@ -1,8 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const https = require('https'); // Assuming the download will be done over HTTPS
-const unzipper = require('unzipper'); // You can use any library for unzipping, here we use 'unzipper'
+const https = require('https');
+const unzipper = require('unzipper');
 
 let mainWindow;
 
@@ -12,8 +12,8 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true, // Enable context isolation for security
-      nodeIntegration: false, // Ensure that nodeIntegration is false for security
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   });
 
@@ -30,11 +30,9 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-// Handle download request from the renderer process
 ipcMain.handle('download-platform-tools', async (event, { tool }) => {
   console.log(`Starting download for: ${tool}`);
 
-  // Example for downloading Android platform tools (you can expand for other tools)
   if (tool === 'android') {
     const url = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip";
     const fileName = "platform-tools-latest-windows.zip";
@@ -51,14 +49,21 @@ ipcMain.handle('download-platform-tools', async (event, { tool }) => {
         downloaded += chunk.length;
         const progress = Math.round((downloaded / totalLength) * 100);
         
-        // Send download progress to renderer
         mainWindow.webContents.send('download-progress', progress);
       });
 
       response.on('end', () => {
-        // Send completion signal to renderer
         mainWindow.webContents.send('download-complete', 'Download Complete');
         console.log('Download completed');
+
+        // Unzip and set environment variables
+        fs.createReadStream(fileName)
+          .pipe(unzipper.Extract({ path: './platform-tools' }))
+          .on('close', () => {
+            const platformToolsPath = path.resolve('./platform-tools/platform-tools');
+            process.env.PATH += `;${platformToolsPath}`;
+            console.log(`Environment variable set: PATH=${process.env.PATH}`);
+          });
       });
 
       response.on('error', (err) => {
